@@ -1,0 +1,102 @@
+services:
+  mariadb:
+    image: mariadb:11
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: analytics
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+    ports: ["3306:3306"]
+    healthcheck:
+      test: ["CMD-SHELL", "set -e; if command -v mariadb-admin >/dev/null 2>&1; then mariadb-admin ping -uroot -p\"$${MYSQL_ROOT_PASSWORD}\"; else mysqladmin ping -uroot -p\"$${MYSQL_ROOT_PASSWORD}\"; fi"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+
+  redis:
+    image: redis:7
+    ports: ["6379:6379"]
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v3.2.0
+    command:
+      - bash
+      - -lc
+      - >
+        mlflow server
+        --backend-store-uri /mlruns
+        --artifacts-destination /mlruns/artifacts
+        --host 0.0.0.0 --port 5000
+    ports: ["5000:5000"]   
+    volumes:
+      - ./mlruns:/mlruns
+
+
+  airflow:
+    build:
+      context: ./airflow
+      dockerfile: Dockerfile
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: mysql+pymysql://airflow:airflow@mariadb:3306/airflow
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__EMAIL__EMAIL_BACKEND: airflow.utils.email.send_email_smtp
+      AIRFLOW__SMTP__SMTP_HOST: smtp.gmail.com
+      AIRFLOW__SMTP__SMTP_PORT: "587"
+      AIRFLOW__SMTP__SMTP_USER: abhimatdangi02@gmail.com
+      AIRFLOW__SMTP__SMTP_PASSWORD: smcdtgvtnrctlvna
+      AIRFLOW__SMTP__SMTP_MAIL_FROM: "abhimatdangi02@gmail.com"
+      AIRFLOW__SMTP__SMTP_STARTTLS: "True"
+      AIRFLOW__SMTP__SMTP_SSL: "False"
+      REPORTS_DIR: /opt/airflow/dags/artifacts/reports
+
+
+    command:
+      - bash
+      - -lc
+      - |
+        mkdir -p /opt/airflow/logs && chmod -R 777 /opt/airflow/logs || true
+        airflow db migrate || airflow db init
+        airflow users create --username admin --password admin \
+          --firstname a --lastname b --role Admin --email admin@example.com || true
+        airflow webserver -p 8080 & exec airflow scheduler
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      mlflow:
+        condition: service_started
+    ports: ["8080:8080"]
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+
+  api:
+    build:
+      context: ./airflow
+      dockerfile: Dockerfile
+    entrypoint: []                      
+    command: ["uvicorn", "api.app:app", "--host", "0.0.0.0", "--port", "8000"]
+    depends_on:
+      airflow:
+        condition: service_started
+    environment:
+      DB_URL: mysql+pymysql://app:app@mariadb:3306/analytics
+      PYTHONPATH: /opt/airflow/dags      
+      MODEL_PATH: /opt/airflow/dags/artifacts/api/salary_model.pkl
+      MODEL_COLS: /opt/airflow/dags/artifacts/model_columns.json
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+
+
+
+
+volumes:
+  mariadb_data:
+  pg_data:
