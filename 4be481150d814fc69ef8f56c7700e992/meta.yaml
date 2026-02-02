@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/194512884060611665/4be481150d814fc69ef8f56c7700e992/artifacts
+end_time: 1758048623012
+entry_point_name: ''
+experiment_id: '194512884060611665'
+lifecycle_stage: active
+run_id: 4be481150d814fc69ef8f56c7700e992
+run_name: LinearRegression
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1758048622846
+status: 3
+tags: []
+user_id: airflow

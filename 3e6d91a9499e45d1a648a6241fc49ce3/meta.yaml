@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/194512884060611665/3e6d91a9499e45d1a648a6241fc49ce3/artifacts
+end_time: 1758048624941
+entry_point_name: ''
+experiment_id: '194512884060611665'
+lifecycle_stage: active
+run_id: 3e6d91a9499e45d1a648a6241fc49ce3
+run_name: GradientBoosting
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1758048624110
+status: 3
+tags: []
+user_id: airflow
