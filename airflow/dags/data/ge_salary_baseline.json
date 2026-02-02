@@ -1,0 +1,24 @@
+{
+  "categorical_domains": {},
+  "null_rate_max": {
+    "AGE": 0.05,
+    "LEAVES_USED": 0.05,
+    "LEAVES_REMAINING": 0.05,
+    "RATINGS": 0.05,
+    "PAST_EXP": 0.05,
+    "TENURE": 0.05,
+    "SEX_M": 0.05,
+    "DESIGNATION_Associate": 0.05,
+    "DESIGNATION_Director": 0.05,
+    "DESIGNATION_Manager": 0.05,
+    "DESIGNATION_Senior Analyst": 0.05,
+    "DESIGNATION_Senior Manager": 0.05,
+    "UNIT_IT": 0.05,
+    "UNIT_Management": 0.05,
+    "UNIT_Marketing": 0.05,
+    "UNIT_Operations": 0.05,
+    "UNIT_Web": 0.05,
+    "SALARY": 0.05
+  },
+  "numeric_bounds": {}
+}

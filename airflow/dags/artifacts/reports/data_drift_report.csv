@@ -1,0 +1,2 @@
+dataset_drift,share_of_drifted_columns,n_drifted,report_path
+False,0.058823529411764705,1,/opt/airflow/dags/artifacts/reports/data_drift_report.html

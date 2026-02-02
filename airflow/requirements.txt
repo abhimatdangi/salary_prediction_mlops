@@ -1,0 +1,14 @@
+pandas
+numpy
+scikit-learn
+sqlalchemy
+pymysql
+redis
+pyarrow
+mlflow
+fastapi
+uvicorn
+evidently>=0.4.17,<0.6
+python-dateutil
+pymysql
+pydantic
