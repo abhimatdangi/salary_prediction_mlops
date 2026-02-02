@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/194512884060611665/daf11b2dbcc04b5aa694adb0f2b523fb/artifacts
+end_time: 1758084492642
+entry_point_name: ''
+experiment_id: '194512884060611665'
+lifecycle_stage: active
+run_id: daf11b2dbcc04b5aa694adb0f2b523fb
+run_name: best_model_summary
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1758084492528
+status: 3
+tags: []
+user_id: airflow
